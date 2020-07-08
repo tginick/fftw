@@ -107,8 +107,8 @@ fn main() {
         //download_archive_windows(&out_dir).unwrap();
         precompiled_dir.push("windows");
         println!("cargo:rustc-link-search={}", precompiled_dir.display());
-        println!("cargo:rustc-link-lib=fftwf3");
-        println!("cargo:rustc-link-lib=fftwf3");
+        println!("cargo:rustc-link-lib=static=fftw3");
+        println!("cargo:rustc-link-lib=static=fftw3f");
     } else {
         //build_unix(&out_dir);
         precompiled_dir.push("linux");
