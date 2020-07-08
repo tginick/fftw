@@ -44,6 +44,7 @@ fn download_archive_windows(out_dir: &Path) -> Result<()> {
     Ok(())
 }
 
+#[allow(dead_code)]
 fn build_unix(out_dir: &Path) {
     let src_dir = PathBuf::from(var("CARGO_MANIFEST_DIR").unwrap()).join("fftw-3.3.8");
     let out_src_dir = out_dir.join("src");
@@ -98,7 +99,6 @@ fn run(command: &mut Command) {
 }
 
 fn main() {
-    let out_dir = PathBuf::from(var("OUT_DIR").unwrap());
     let mut precompiled_dir = PathBuf::from(var("CARGO_MANIFEST_DIR").unwrap());
     if cfg!(target_os = "windows") {
         //download_archive_windows(&out_dir).unwrap();
@@ -108,8 +108,14 @@ fn main() {
         println!("cargo:rustc-link-lib=fftwf3");
         println!("cargo:rustc-link-lib=fftwf3");
     } else {
-        build_unix(&out_dir);
-        println!("cargo:rustc-link-search={}", out_dir.join("lib").display());
+        precompiled_dir.push("precompiled");
+        precompiled_dir.push("linux");
+        if cfg!(target_arch = "arm") {
+            // TODO:
+        } else {
+            precompiled_dir.push("x64");
+        }
+        println!("cargo:rustc-link-search={}", precompiled_dir.display());
         println!("cargo:rustc-link-lib=static=fftw3");
         println!("cargo:rustc-link-lib=static=fftw3f");
     }
