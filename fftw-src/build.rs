@@ -6,6 +6,7 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 use zip::ZipArchive;
 
+#[allow(dead_code)]
 fn download_archive_windows(out_dir: &Path) -> Result<()> {
     if out_dir.join("libfftw3.dll").exists() && out_dir.join("libfftw3f.dll").exists() {
         return Ok(());
@@ -98,11 +99,14 @@ fn run(command: &mut Command) {
 
 fn main() {
     let out_dir = PathBuf::from(var("OUT_DIR").unwrap());
+    let mut precompiled_dir = PathBuf::from(var("CARGO_MANIFEST_DIR").unwrap());
     if cfg!(target_os = "windows") {
-        download_archive_windows(&out_dir).unwrap();
-        println!("cargo:rustc-link-search={}", out_dir.display());
-        println!("cargo:rustc-link-lib=libfftw3-3");
-        println!("cargo:rustc-link-lib=libfftw3f-3");
+        //download_archive_windows(&out_dir).unwrap();
+        precompiled_dir.push("precompiled");
+        precompiled_dir.push("windows");
+        println!("cargo:rustc-link-search={}", precompiled_dir.display());
+        println!("cargo:rustc-link-lib=fftwf3");
+        println!("cargo:rustc-link-lib=fftwf3");
     } else {
         build_unix(&out_dir);
         println!("cargo:rustc-link-search={}", out_dir.join("lib").display());
