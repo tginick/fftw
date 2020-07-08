@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use anyhow::Result;
 use std::env::var;
 use std::fs::{canonicalize, File};
@@ -6,7 +8,6 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 use zip::ZipArchive;
 
-#[allow(dead_code)]
 fn download_archive_windows(out_dir: &Path) -> Result<()> {
     if out_dir.join("libfftw3.dll").exists() && out_dir.join("libfftw3f.dll").exists() {
         return Ok(());
@@ -98,7 +99,6 @@ fn run(command: &mut Command) {
 }
 
 fn main() {
-    let out_dir = PathBuf::from(var("OUT_DIR").unwrap());
     let target_arch = var("CARGO_CFG_TARGET_ARCH").unwrap();
     let mut precompiled_dir = PathBuf::from(var("CARGO_MANIFEST_DIR").unwrap());
     precompiled_dir.push("precompiled");
