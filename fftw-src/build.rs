@@ -116,7 +116,6 @@ fn main() {
             precompiled_dir.push("x64");
         }
         println!("cargo:rustc-link-search={}", precompiled_dir.display());
-        println!("cargo:rustc-link-lib=static=fftw3");
-        println!("cargo:rustc-link-lib=static=fftw3f");
+        println!("cargo:rustc-link-lib=libfftw3f.a");
     }
 }
