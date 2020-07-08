@@ -99,17 +99,25 @@ fn run(command: &mut Command) {
 
 fn main() {
     let out_dir = PathBuf::from(var("OUT_DIR").unwrap());
+    let target_arch = var("CARGO_CFG_TARGET_ARCH").unwrap();
     let mut precompiled_dir = PathBuf::from(var("CARGO_MANIFEST_DIR").unwrap());
+    precompiled_dir.push("precompiled");
+
     if cfg!(target_os = "windows") {
         //download_archive_windows(&out_dir).unwrap();
-        precompiled_dir.push("precompiled");
         precompiled_dir.push("windows");
         println!("cargo:rustc-link-search={}", precompiled_dir.display());
         println!("cargo:rustc-link-lib=fftwf3");
         println!("cargo:rustc-link-lib=fftwf3");
     } else {
-        build_unix(&out_dir);
-        println!("cargo:rustc-link-search={}", out_dir.join("lib").display());
+        //build_unix(&out_dir);
+        precompiled_dir.push("linux");
+        if target_arch == "arm" {
+            precompiled_dir.push("armv7")
+        } else if target_arch == "x86_64" {
+            precompiled_dir.push("x64");
+        }
+        println!("cargo:rustc-link-search={}", precompiled_dir.display());
         println!("cargo:rustc-link-lib=static=fftw3");
         println!("cargo:rustc-link-lib=static=fftw3f");
     }
