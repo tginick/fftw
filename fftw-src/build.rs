@@ -113,12 +113,23 @@ fn main() {
         //build_unix(&out_dir);
         precompiled_dir.push("linux");
         if target_arch == "arm" {
-            precompiled_dir.push("armv7")
+            precompiled_dir.push("armv7");
+
+            println!("cargo:rustc-link-search={}", precompiled_dir.display());
+            println!("cargo:rustc-link-lib=static=fftw3");
+            println!("cargo:rustc-link-lib=static=fftw3f");
         } else if target_arch == "x86_64" {
             precompiled_dir.push("x64");
+
+            println!("cargo:rustc-link-search={}", precompiled_dir.display());
+            println!("cargo:rustc-link-lib=static=fftw3");
+            println!("cargo:rustc-link-lib=static=fftw3f");
+        } else if target_arch == "aarch64" {
+            precompiled_dir.push("aarch64");
+
+            // using elk's sdk, these are provided as so files
+            println!("cargo:rustc-link-lib=fftw3");
+            println!("cargo:rustc-link-lib=fftw3f");
         }
-        println!("cargo:rustc-link-search={}", precompiled_dir.display());
-        println!("cargo:rustc-link-lib=static=fftw3");
-        println!("cargo:rustc-link-lib=static=fftw3f");
     }
 }
