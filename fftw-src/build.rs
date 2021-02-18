@@ -101,10 +101,11 @@ fn run(command: &mut Command) {
 
 fn main() {
     let target_arch = var("CARGO_CFG_TARGET_ARCH").unwrap();
+    let target_os = var("CARGO_CFG_TARGET_OS").unwrap();
     let mut precompiled_dir = PathBuf::from(var("CARGO_MANIFEST_DIR").unwrap());
     precompiled_dir.push("precompiled");
 
-    if cfg!(target_os = "windows") {
+    if target_os == "windows" {
         //download_archive_windows(&out_dir).unwrap();
         precompiled_dir.push("windows");
         println!("cargo:rustc-link-search={}", precompiled_dir.display());
